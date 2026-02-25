@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Nicholas ♡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background: #fafaf8;
+            color: #2a2a2a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.03;
+            z-index: 1000;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Floating hearts on click */
+        .floating-heart {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 9999;
+            animation: floatUp 2s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .date-badge {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.3s forwards;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.6s forwards;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
+            color: #d4a574;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 300;
+            max-width: 500px;
+            opacity: 0;
+            animation: fadeIn 1s ease 0.9s forwards;
+        }
+
+        .interactive-hint {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #999;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.5s forwards, pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            opacity: 0;
+            animation: fadeIn 1s ease 1.2s forwards, float 3s ease infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -10px); }
+        }
+
+        /* Letter Section */
+        .letter {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 4rem 0;
+        }
+
+        .letter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .letter-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0;
+        }
+
+        .letter-content.in-view h2 {
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .letter-content p {
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            line-height: 1.9;
+        }
+
+        .letter-content.in-view p:nth-child(2) { animation: fadeIn 1s ease 0.2s forwards; }
+        .letter-content.in-view p:nth-child(3) { animation: fadeIn 1s ease 0.4s forwards; }
+        .letter-content.in-view p:nth-child(4) { animation: fadeIn 1s ease 0.6s forwards; }
+        .letter-content.in-view p:nth-child(5) { animation: fadeIn 1s ease 0.8s forwards; }
+        .letter-content.in-view p:nth-child(6) { animation: fadeIn 1s ease 1s forwards; }
+        .letter-content.in-view p:nth-child(7) { animation: fadeIn 1s ease 1.2s forwards; }
+        .letter-content.in-view p:nth-child(8) { animation: fadeIn 1s ease 1.4s forwards; }
+
+        .signature {
+            margin-top: 3rem;
+            text-align: right;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0;
+        }
+
+        .letter-content.in-view .signature {
+            animation: fadeIn 1s ease 1.6s forwards;
+        }
+
+        /* Reasons Section - Interactive Cards */
+        .reasons-section {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .reasons-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .reasons-section > p {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+        }
+
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .reason-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reason-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 165, 116, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .reason-card:hover::before {
+            left: 100%;
+        }
+
+        .reason-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .reason-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .reason-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            color: #d4a574;
+            margin-bottom: 1rem;
+        }
+
+        .reason-text {
+            font-size: 1rem;
+            color: #2a2a2a;
+            line-height: 1.6;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 6rem 0;
+            background: linear-gradient(180deg, #fafaf8 0%, #f5f5f3 100%);
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-header h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-header p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        /* Photo Upload Section (for you to add photos) */
+        .upload-section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border-left: 3px solid #d4a574;
+        }
+
+        .upload-section h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #d4a574;
+        }
+
+        .upload-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .upload-btn, .toggle-edit-btn {
+            background: #2a2a2a;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover, .toggle-edit-btn:hover {
+            background: #000;
+            transform: translateY(-2px);
+        }
+
+        .toggle-edit-btn.active {
+            background: #d4a574;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Polaroid-style photo gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 1rem;
+            padding-bottom: 3rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: rotate(0deg);
+            opacity: 0;
+            animation: dropIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .polaroid:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        @keyframes dropIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) rotate(-10deg) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotate(var(--rotation)) scale(1);
+            }
+        }
+
+        .polaroid-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            margin-bottom: 0.8rem;
+        }
+
+        .polaroid-caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+            min-height: 40px;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+        }
+
+        .polaroid-caption input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #666;
+            outline: none;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .polaroid-delete {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 14px;
+        }
+
+        .polaroid:hover .polaroid-delete {
+            opacity: 1;
+        }
+
+        .edit-mode .polaroid-delete {
+            opacity: 1;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(250, 250, 248, 0.98);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            text-align: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            margin-bottom: 1rem;
+        }
+
+        .lightbox-caption {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #666;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: #2a2a2a;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+            background: #000;
+        }
+
+        /* Stats Counter */
+        .stats-section {
+            padding: 6rem 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            opacity: 0;
+        }
+
+        .stat-item.in-view {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .stat-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 4rem;
+            font-weight: 300;
+            color: #d4a574;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 4rem 0;
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .heart {
+            display: inline-block;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .heart:hover {
+            transform: scale(1.3);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 4rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .reasons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="date-badge">February 26, 2025</div>
+        <h1 onclick="celebrate()">Nicholas<br>turns 23</h1>
+        <p class="hero-subtitle">A little something special for someone who makes every day better</p>
+        <p class="interactive-hint">💫 Click around and explore 💫</p>
+        <div class="scroll-hint">Scroll ↓</div>
+    </section>
+
+    <!-- Letter -->
+    <section class="letter">
+        <div class="container">
+            <div class="letter-content">
+                <h2>Happy 23rd Birthday, Nicholas</h2>
+                <p>Another year, another chapter, another reason to be grateful. Aku mau ngucapin selamat, bukan cuma untuk ultahnya aja, tapi untuk everything we've been through together this past year. Terima kasih yaa sayang, for continuously showing me what love really means—the kind that grows deeper, quieter, more real.</p>
+                <p>Selamat menikmati another year of adulting kak nicholas hehe. But just a gentle reminder ya, i got your back, always. Dalam setiap keputusan, setiap langkah, setiap moment of doubt—aku ada di sini. Aku bakal terus ada di samping kamu, supporting every dream you chase and every goal you set.</p>
+                <p>Kalau aku inget-inget lagi, di umur 22 kemarin banyak banget yang terjadi ya—kamu graduated, diterima kerja sebagai contract, dan yang paling special... we made it official. Ketiga hal itu somehow jadi milestone yang aku personally appreciate banget, karena aku berkesempatan untuk witness dan jadi bagian dari semua momen penting itu.</p>
+                <p>Satu tahun udah berlalu sejak ultah kamu yang ke-22, dan somehow aku masih amazed at how you keep making me fall deeper. Kamu nggak cuma jadi partner, tapi juga best friend, support system, dan home yang aku always wanna come back to.</p>
+                <p>Thank you for being patient with me, for understanding me in ways that sometimes even i don't understand myself. Thank you for staying, for fighting with me (and sometimes against me haha), and for making this relationship feel worth every single effort.</p>
+                <p>Jangan bosen sama aku ya sayang, because i still have sooo many plans for us! Masih banyak tempat yang mau aku explore bareng kamu, masih banyak late night talks yang belum kita obrolin, masih banyak memories yang pengen aku bikin sama kamu.</p>
+                <p>May your 23rd year be filled with growth, peace, and all the happiness you deserve. May we continue to build something beautiful together, despite everything and everyone.</p>
+                <div class="signature">All my love, always ♡</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reasons I Love You -->
+    <section class="reasons-section">
+        <div class="container">
+            <h2>23 Things I Love About You</h2>
+            <p>Hover over each card to reveal</p>
+            <div class="reasons-grid" id="reasonsGrid">
+                <!-- Reasons will be generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="gallery-section">
+        <div class="container">
+            <div class="gallery-header">
+                <h2>Our Moments Together</h2>
+                <p>Photos from all our favorite times</p>
+            </div>
+
+            <!-- Upload Section (visible for editing) -->
+            <div class="upload-section" id="uploadSection">
+                <h3>📸 Add Photos (For You)</h3>
+                <p style="color: #999; font-size: 0.85rem; margin-bottom: 1rem;">Upload photos and add captions for Nicholas to see</p>
+                <div class="upload-controls">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                        Upload Photos
+                    </button>
+                    <button class="toggle-edit-btn" id="toggleEditBtn" onclick="toggleEditMode()">
+                        Edit Mode: ON
+                    </button>
+                    <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+                </div>
+            </div>
+
+            <div class="gallery-grid" id="gallery"></div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">23</div>
+                    <div class="stat-label">Years Amazing</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="photoCount">0</div>
+                    <div class="stat-label">Memories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">More to Come</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with <span class="heart" onclick="heartClick(event)">♡</span> for you</p>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <div class="lightbox-close">×</div>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img class="lightbox-img" id="lightboxImg" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <script>
+        let photos = JSON.parse(localStorage.getItem('nicholasPhotos') || '[]');
+        let editMode = true;
+
+        const reasons = [
+            "Your smile lights up my entire day",
+            "The way you make me laugh",
+            "How you always know what to say",
+            "Your kindness to everyone",
+            "The way you listen",
+            "Your amazing sense of humor",
+            "How you make me feel safe",
+            "Your thoughtfulness",
+            "The way you care about things",
+            "Your honesty",
+            "How supportive you are",
+            "Your determination",
+            "The little things you remember",
+            "How you make ordinary moments special",
+            "Your loyalty",
+            "The way you challenge me to be better",
+            "Your patience",
+            "How you never give up",
+            "Your unique perspective",
+            "The way you make me feel loved",
+            "Your authenticity",
+            "How you celebrate my wins",
+            "Everything about you"
+        ];
+
+        // Initialize reasons cards
+        function initReasons() {
+            const grid = document.getElementById('reasonsGrid');
+            reasons.forEach((reason, index) => {
+                const card = document.createElement('div');
+                card.className = 'reason-card';
+                card.innerHTML = `
+                    <div class="reason-number">${index + 1}</div>
+                    <div class="reason-text">${reason}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Intersection Observer
+        const observerOptions = {
+            threshold: 0.3,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, observerOptions);
+
+        observer.observe(document.querySelector('.letter-content'));
+        document.querySelectorAll('.stat-item').forEach(item => observer.observe(item));
+
+        // Celebration effect
+        function celebrate() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    createFloatingHeart();
+                }, i * 50);
+            }
+        }
+
+        function createFloatingHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '♡';
+            heart.style.left = Math.random() * window.innerWidth + 'px';
+            heart.style.top = window.innerHeight - 100 + 'px';
+            heart.style.color = `hsl(${Math.random() * 30 + 15}, 70%, 60%)`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        function heartClick(event) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '♡';
+            heart.style.left = event.clientX + 'px';
+            heart.style.top = event.clientY + 'px';
+            heart.style.color = '#d4a574';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        }
+
+        // Toggle edit mode
+        function toggleEditMode() {
+            editMode = !editMode;
+            const btn = document.getElementById('toggleEditBtn');
+            const uploadSection = document.getElementById('uploadSection');
+            const gallery = document.getElementById('gallery');
+            
+            if (editMode) {
+                btn.textContent = 'Edit Mode: ON';
+                btn.classList.add('active');
+                uploadSection.style.display = 'block';
+                gallery.classList.add('edit-mode');
+            } else {
+                btn.textContent = 'Edit Mode: OFF';
+                btn.classList.remove('active');
+                uploadSection.style.display = 'none';
+                gallery.classList.remove('edit-mode');
+            }
+        }
+
+        // Photo handling
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        photos.push({
+                            src: e.target.result,
+                            caption: ''
+                        });
+                        localStorage.setItem('nicholasPhotos', JSON.stringify(photos));
+                        renderGallery();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            
+            photos.forEach((photo, index) => {
+                const polaroid = document.createElement('div');
+                polaroid.className = 'polaroid';
+                polaroid.style.setProperty('--rotation', (index % 2 === 0 ? '2deg' : '-2deg'));
+                polaroid.style.animationDelay = `${index * 0.1}s`;
+                
+                const captionHTML = editMode 
+                    ? `<input type="text" value="${photo.caption}" onchange="updateCaption(${index}, this.value)" placeholder="Add a caption...">`
+                    : `<div>${photo.caption}</div>`;
+                
+                polaroid.innerHTML = `
+                    <img class="polaroid-img" src="${photo.src}" alt="Memory" onclick="openLightbox(${index})">
+                    <div class="polaroid-caption">${captionHTML}</div>
+                    ${editMode ? `<button class="polaroid-delete" onclick="deletePhoto(${index}, event)">×</button>` : ''}
+                `;
+                gallery.appendChild(polaroid);
+            });
+
+            updatePhotoCount();
+        }
+
+        function updateCaption(index, caption) {
+            photos[index].caption = caption;
+            localStorage.setItem('nicholasPhotos', JSON.stringify(photos));
+        }
+
+        function deletePhoto(index, event) {
+            event.stopPropagation();
+            if (confirm('Delete this photo?')) {
+                photos.splice(index, 1);
+                localStorage.setItem('nicholasPhotos', JSON.stringify(photos));
+                renderGallery();
+            }
+        }
+
+        function openLightbox(index) {
+            const photo = photos[index];
+            document.getElementById('lightboxImg').src = photo.src;
+            document.getElementById('lightboxCaption').textContent = photo.caption;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        function updatePhotoCount() {
+            const counter = document.getElementById('photoCount');
+            let current = 0;
+            const target = photos.length;
+            
+            const increment = () => {
+                if (current < target) {
+                    current++;
+                    counter.textContent = current;
+                    setTimeout(increment, 30);
+                } else {
+                    counter.textContent = target;
+                }
+            };
+            
+            increment();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeLightbox();
+        });
+
+        // Click anywhere creates hearts
+        document.addEventListener('click', (e) => {
+            if (Math.random() > 0.7 && !e.target.closest('button, input, .polaroid')) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = '♡';
+                heart.style.left = e.clientX + 'px';
+                heart.style.top = e.clientY + 'px';
+                heart.style.color = '#d4a574';
+                heart.style.fontSize = '0.8rem';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }
+        });
+
+        // Initialize
+        initReasons();
+        renderGallery();
+    </script>
+</body>
+</html>
